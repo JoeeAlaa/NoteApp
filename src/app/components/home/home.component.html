@@ -1,0 +1,154 @@
+<!-- add btn -->
+<div class="container mt-4 text-center">
+    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add Note</button>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="exampleModalLabel">New Note</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+
+        <form [formGroup]="addNoteForm" (ngSubmit)="addNote()">
+
+          <div class="mb-3">
+            <label for="title" class="col-form-label">Title:</label>
+            <input 
+            [ngClass]="{'is-valid':!addNoteForm.get('title')?.errors && (addNoteForm.get('title')?.touched || addNoteForm.get('title')?.dirty) , 'is-invalid':addNoteForm.get('title')?.errors && (addNoteForm.get('title')?.touched || addNoteForm.get('title')?.dirty)}"
+            type="text" class="form-control" id="title" formControlName="title">
+
+            @if (addNoteForm.get('title')?.errors && (addNoteForm.get('title')?.touched || addNoteForm.get('title')?.dirty)) {
+                <div class="alert alert-danger p-1 mb-0 shadow small">
+                    @if (addNoteForm.get('title')?.getError('required')) {
+                        <p class="m-0">title is Required</p>
+                    }
+
+                </div>
+            }
+          </div>
+
+          <div class="mb-3">
+            <label for="content" class="col-form-label">Content:</label>
+            <textarea
+            [ngClass]="{'is-valid':!addNoteForm.get('content')?.errors && (addNoteForm.get('content')?.touched || addNoteForm.get('content')?.dirty) , 'is-invalid':addNoteForm.get('content')?.errors && (addNoteForm.get('content')?.touched || addNoteForm.get('content')?.dirty)}"
+            class="form-control resize" id="content" formControlName="content"></textarea>
+
+            @if (addNoteForm.get('content')?.errors && (addNoteForm.get('content')?.touched || addNoteForm.get('content')?.dirty)) {
+                <div class="alert alert-danger p-1 mb-0 shadow small">
+                    @if (addNoteForm.get('content')?.getError('required')) {
+                        <p class="m-0">content is Required</p>
+                    }
+
+                </div>
+            }
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button [disabled]="isLoading" type="submit" class="btn btn-main">
+                Add
+                @if (isLoading) {
+                    <span><i class="fas fa-spin fa-spinner"></i></span>
+                }
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- *********** -->
+
+<!-- search -->
+ <input type="text" class="form-control w-50 mx-auto mt-3" placeholder="Search by Title" [(ngModel)]="text">
+<!-- ************* -->
+
+
+<!-- show notes -->
+<div class="container py-4">
+    <div class="row g-4">
+        @for (note of allNotes() | search : text ; track note._id) {
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="fw-bold card-title">title: {{note.title}}</h5>
+                        <p class="fw-bold card-text">Content: {{note.content}}</p>
+                        <p class="fw-bold card-text">Create At : {{note.createdAt | date:'fullDate' }}</p>
+                        <p class="fw-bold card-text">Update At : {{note.updatedAt| date:'fullDate' }}</p>
+                        <button (click)="setUpdateForm(note , note._id)" type="button" class="card-link btn btn-warning" data-bs-toggle="modal" data-bs-target="#updateExampleModal" data-bs-whatever="@mdo">Update</button>
+                        <button (click)="confirmBox(note._id)" class="card-link btn btn-danger">Delete</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!-- ************* -->
+
+<!-- update -->
+<div class="modal fade" id="updateExampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Update Note</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+  
+          <form [formGroup]="updateNoteForm" (ngSubmit)="updateNote()">
+  
+            <div class="mb-3">
+              <label for="title" class="col-form-label">Title:</label>
+              <input 
+              [ngClass]="{'is-valid':!updateNoteForm.get('title')?.errors && (updateNoteForm.get('title')?.touched || updateNoteForm.get('title')?.dirty) , 'is-invalid':updateNoteForm.get('title')?.errors && (updateNoteForm.get('title')?.touched || updateNoteForm.get('title')?.dirty)}"
+              type="text" class="form-control" id="title" formControlName="title">
+  
+              @if (updateNoteForm.get('title')?.errors && (updateNoteForm.get('title')?.touched || updateNoteForm.get('title')?.dirty)) {
+                <div class="alert alert-danger p-1 mb-0 shadow small">
+                    @if (updateNoteForm.get('title')?.getError('required')) {
+                        <p class="m-0">title is Required</p>
+                    }
+
+                </div>
+              }
+            </div>
+  
+            <div class="mb-3">
+              <label for="content" class="col-form-label">Content:</label>
+              <textarea
+              [ngClass]="{'is-valid':!updateNoteForm.get('content')?.errors && (updateNoteForm.get('content')?.touched || updateNoteForm.get('content')?.dirty) , 'is-invalid':updateNoteForm.get('content')?.errors && (updateNoteForm.get('content')?.touched || updateNoteForm.get('content')?.dirty)}"
+              class="form-control resize" id="content" formControlName="content"></textarea>
+  
+              @if (updateNoteForm.get('content')?.errors && (updateNoteForm.get('content')?.touched || updateNoteForm.get('content')?.dirty)) {
+                <div class="alert alert-danger p-1 mb-0 shadow small">
+                    @if (updateNoteForm.get('content')?.getError('required')) {
+                    <p class="m-0">content is Required</p>
+                    }
+  
+                </div>
+              }
+            </div>
+  
+            <div class="modal-footer">
+                <button [disabled]="isLoading" type="submit" class="btn btn-warning">
+                  Update
+                  @if (isLoading) {
+                    <span><i class="fas fa-spin fa-spinner"></i></span>
+                  }
+                </button>
+            </div>
+  
+          </form>
+  
+        </div>
+  
+      </div>
+    </div>
+</div>
+<!-- **************** -->

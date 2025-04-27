@@ -1,0 +1,117 @@
+<section class="bg-main-light shadow p-2 my-2 rounded-4 w-75 mx-auto">
+    <h1 class="h2 text-main">Register Now:</h1>
+
+    <form [formGroup]="registerForm" (ngSubmit)="registerSubmit()">
+
+        <div class="my-2">
+            <label for="name">Name:</label>
+            <input 
+            [ngClass]="{'is-valid': !registerForm.get('name')?.errors && (registerForm.get('name')?.touched || registerForm.get('name')?.dirty) , 'is-invalid':registerForm.get('name')?.errors && (registerForm.get('name')?.touched || registerForm.get('name')?.dirty)}"
+            id="name" type="text" class="form-control" formControlName="name">
+
+            @if (registerForm.get('name')?.errors && (registerForm.get('name')?.touched || registerForm.get('name')?.dirty)) {
+
+                <div class="alert alert-danger p-1 mb-0 shadow small">
+                    @if (registerForm.get('name')?.getError('required')) {
+                        <p class="m-0">Name is Required</p>
+                    }
+                    @else if (registerForm.get('name')?.getError('minlength')) {
+                        <p class="m-0">Name Should be more than or equal  3 chars</p>
+                    }
+                    @else if (registerForm.get('name')?.getError('maxlength')) {
+                        <p class="m-0">Name Should be less than or equal  20 chars</p>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="my-2">
+            <label for="email">Email:</label>
+            <input
+            [ngClass]="{'is-valid': !registerForm.get('email')?.errors && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty) , 'is-invalid':registerForm.get('email')?.errors && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)}"
+            id="email" type="email" class="form-control" formControlName="email">
+
+            @if (registerForm.get('email')?.errors && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)) {
+
+                <div class="alert alert-danger p-1 mb-0 shadow small">
+                    @if (registerForm.get('email')?.getError('required')) {
+                        <p class="m-0">Email is Required</p>
+                    }
+                    @else if (registerForm.get('email')?.getError('email')) {
+                        <p class="m-0">Enter Valid Email</p>
+                    }
+
+                </div>
+            }
+        </div>
+
+        <div class="my-2">
+            <label for="password">password:</label>
+            <input
+            [ngClass]="{'is-valid': !registerForm.get('password')?.errors && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty) , 'is-invalid':registerForm.get('password')?.errors && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)}"
+            id="password" type="password" class="form-control" formControlName="password">
+
+            @if (registerForm.get('password')?.errors && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)) {
+                <div class="alert alert-danger p-1 mb-0 shadow small">
+                    @if (registerForm.get('password')?.getError('required')) {
+                        <p class="m-0">password is Required</p>
+                    }
+                    @else if (registerForm.get('password')?.getError('pattern')) {
+                        <p class="m-0">Must be at least 6 chars</p>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="my-2">
+            <label for="age">Age:</label>
+            <input
+            [ngClass]="{'is-valid': !registerForm.get('age')?.errors && (registerForm.get('age')?.touched || registerForm.get('age')?.dirty) , 'is-invalid':registerForm.get('age')?.errors && (registerForm.get('age')?.touched || registerForm.get('age')?.dirty)}"
+            id="age" type="number" class="form-control" formControlName="age">
+
+            @if (registerForm.get('age')?.errors && (registerForm.get('age')?.touched || registerForm.get('age')?.dirty)) {
+                <div class="alert alert-danger p-1 mb-0 shadow small">
+                    @if (registerForm.get('age')?.getError('required')) {
+                        <p class="m-0">age is Required</p>
+                    }
+                    @else if (registerForm.get('age')?.getError('pattern')) {
+                        <p class="m-0">Enter Valid Age</p>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="my-2">
+            <label for="phone">Phone:</label>
+            <input
+            [ngClass]="{'is-valid': !registerForm.get('phone')?.errors && (registerForm.get('phone')?.touched || registerForm.get('phone')?.dirty) , 'is-invalid':registerForm.get('phone')?.errors && (registerForm.get('phone')?.touched || registerForm.get('phone')?.dirty)}"
+            id="phone" type="tel" class="form-control" formControlName="phone">
+
+            @if (registerForm.get('phone')?.errors && (registerForm.get('phone')?.touched || registerForm.get('phone')?.dirty)) {
+                <div class="alert alert-danger p-1 mb-0 shadow small">
+                    @if (registerForm.get('phone')?.getError('required')) {
+                        <p class="m-0">phone is Required</p>
+                    }
+                    @else if (registerForm.get('phone')?.getError('pattern')) {
+                        <p class="m-0">Accept only egypt phone numbers"</p>
+                    }
+                </div>
+            }
+        </div>
+
+        <button [disabled]=" isLoading" type="submit" class="btn btn-danger d-block ms-auto">
+            Register
+            @if (isLoading) {
+                <span><i class="fas fa-spin fa-spinner"></i></span>
+            }
+        </button>
+        
+        @if (errMsg) {
+            <p class="alert alert-danger p-1 mb-0 shadow-lg w-50 rounded text-center">{{errMsg}}</p>
+        }
+        @if (successMsg) {
+            <p class="alert alert-success p-1 mb-0 shadow-lg w-50 rounded text-center">{{successMsg}}</p>
+        }
+
+    </form>
+</section>
